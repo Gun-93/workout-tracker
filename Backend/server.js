@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
@@ -18,9 +17,14 @@ connectDB(process.env.MONGO_URI);
 
 // Middlewares
 app.use(helmet());
-app.use(cors({ origin: "*", credentials: true })); // Allow all origins; adjust in production
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(morgan("dev"));
+
+// Root route
+app.get("/", (req, res) => {
+  res.send("Workout Tracker API is running. Use /api/user and /api/workouts routes.");
+});
 
 // API Routes
 app.use("/api/user", authRoutes);
