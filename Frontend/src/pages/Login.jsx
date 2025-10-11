@@ -19,15 +19,12 @@ export default function Login() {
     setSuccess("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/user/login", form);
-      const { user, token } = res.data;
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/login`, form);
+      const { token, user } = res.data;
 
-      // Save user in localStorage
-      localStorage.setItem("user", JSON.stringify(user));
+      // Save token and user info
       localStorage.setItem("token", token);
-
-      // Trigger Navbar update
-      window.dispatchEvent(new Event("userChange"));
+      localStorage.setItem("user", JSON.stringify(user));
 
       setSuccess("Login successful! Redirecting...");
       setTimeout(() => navigate("/workouts"), 1000);
@@ -66,6 +63,7 @@ export default function Login() {
             onChange={handleChange}
             className="w-full border border-gray-300 p-2 rounded focus:outline-blue-500"
             required
+            autoComplete="email"
             placeholder="you@example.com"
           />
         </div>
@@ -79,6 +77,7 @@ export default function Login() {
             onChange={handleChange}
             className="w-full border border-gray-300 p-2 rounded focus:outline-blue-500"
             required
+            autoComplete="current-password"
             placeholder="••••••••"
           />
         </div>
@@ -101,6 +100,7 @@ export default function Login() {
     </div>
   );
 }
+
 
 
 

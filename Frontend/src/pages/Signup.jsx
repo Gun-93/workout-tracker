@@ -19,8 +19,8 @@ export default function Signup() {
     setSuccess("");
 
     try {
-      await axios.post("http://localhost:5000/api/user/signup", form);
-      setSuccess("Signup successful! Please login to continue.");
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/user/signup`, form);
+      setSuccess("Signup successful! Redirecting to login...");
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
@@ -57,6 +57,7 @@ export default function Signup() {
             onChange={handleChange}
             className="w-full border border-gray-300 p-2 rounded focus:outline-blue-500"
             required
+            autoComplete="name"
             placeholder="John Doe"
           />
         </div>
@@ -70,6 +71,7 @@ export default function Signup() {
             onChange={handleChange}
             className="w-full border border-gray-300 p-2 rounded focus:outline-blue-500"
             required
+            autoComplete="email"
             placeholder="you@example.com"
           />
         </div>
@@ -83,6 +85,7 @@ export default function Signup() {
             onChange={handleChange}
             className="w-full border border-gray-300 p-2 rounded focus:outline-blue-500"
             required
+            autoComplete="new-password"
             placeholder="••••••••"
           />
         </div>
