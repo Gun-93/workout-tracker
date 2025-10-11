@@ -8,6 +8,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.js";
 import workoutRoutes from "./routes/workouts.js";
 import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
@@ -27,8 +28,22 @@ app.use(morgan("dev"));
 app.use("/api/user", authRoutes);
 app.use("/api/workouts", workoutRoutes);
 
-// Basic health
+// Basic health check
 app.get("/api/health", (req, res) => res.json({ status: "ok", time: new Date().toISOString() }));
+
+// Serve React build in production
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from React app
+  app.use(express.static(path.join(__dirname, "client/build"))); // update path if your React build is elsewhere
+
+  // Handle React routing, return index.html for all non-API requests
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
+}
 
 // Error handler fallback
 app.use((err, req, res, next) => {
@@ -39,4 +54,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
 
