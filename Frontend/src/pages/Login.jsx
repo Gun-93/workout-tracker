@@ -19,10 +19,14 @@ export default function Login() {
     setSuccess("");
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/login`, form);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/user/login`,
+        form
+      );
+
       const { token, user } = res.data;
 
-      // Save token and user info
+      // Save token and user info in localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 

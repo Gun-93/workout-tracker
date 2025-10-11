@@ -19,9 +19,23 @@ export default function Signup() {
     setSuccess("");
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/user/signup`, form);
-      setSuccess("Signup successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 1500);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/user/signup`,
+        form
+      );
+
+      // Auto-login after signup (optional)
+      const loginRes = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/user/login`,
+        { email: form.email, password: form.password }
+      );
+
+      const { token, user } = loginRes.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      setSuccess("Signup successful! Redirecting...");
+      setTimeout(() => navigate("/workouts"), 1500);
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
     } finally {
@@ -108,5 +122,6 @@ export default function Signup() {
     </div>
   );
 }
+
 
 
